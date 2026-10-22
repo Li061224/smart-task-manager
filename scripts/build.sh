@@ -21,7 +21,11 @@ print_time() {
 # ==================== 步骤 0 ====================
 echo "🗑️  [0/6] 安装插件"
 STEP_START=$(node -e "console.log(Date.now())")
-npx fullstack-cli action-plugin init
+if [[ "${SKIP_PLUGIN_INIT:-false}" == "true" ]]; then
+  echo "   [skip] 跳过插件安装 (SKIP_PLUGIN_INIT=true，用于无终端 CI/Vercel 构建)"
+else
+  npx fullstack-cli action-plugin init
+fi
 print_time $STEP_START
 echo ""
 
@@ -181,6 +185,9 @@ STEP_START=$(node -e "console.log(Date.now())")
 # 智能依赖裁剪（仅全量构建时执行，纯前端场景不打包 server，无需裁剪）
 if [[ "${only_frontend_change:-false}" == "true" ]]; then
   echo "✂️  [6/6] 跳过智能依赖裁剪 (only_frontend_change=true)"
+elif [[ "${SKIP_PRUNE:-false}" == "true" ]]; then
+  # Vercel 等外部托管从项目根启动（根 node_modules 完整），无需裁剪精简产物
+  echo "✂️  [6/6] 跳过智能依赖裁剪 (SKIP_PRUNE=true)"
 else
   echo "✂️  [6/6] 智能依赖裁剪"
 
