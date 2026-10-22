@@ -1,5 +1,4 @@
 {
   "framework": null,
-  "buildCommand": "SKIP_PLUGIN_INIT=true SKIP_PRUNE=true MIAODA_APP_TYPE=3 npm run build",
-  "nodeVersion": "22.x"
+  "buildCommand": "SKIP_PLUGIN_INIT=true SKIP_PRUNE=true MIAODA_APP_TYPE=3 npm run build"
 }

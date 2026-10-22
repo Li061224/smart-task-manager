@@ -210,7 +210,12 @@ if [[ "${only_frontend_change:-false}" == "true" ]]; then
   echo "   产物大小:        $DIST_SIZE"
   echo ""
 else
-  NODE_MODULES_SIZE=$(du -sh "$DIST_DIR/node_modules" | cut -f1)
+  # 跳过裁剪（SKIP_PRUNE=true）时 dist 下没有精简后的 node_modules，容错统计
+  if [ -d "$DIST_DIR/node_modules" ]; then
+    NODE_MODULES_SIZE=$(du -sh "$DIST_DIR/node_modules" | cut -f1)
+  else
+    NODE_MODULES_SIZE="N/A (SKIP_PRUNE)"
+  fi
   echo ""
   echo "📊 构建产物统计:"
   echo "   产物大小:        $DIST_SIZE"
